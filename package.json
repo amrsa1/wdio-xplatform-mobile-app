@@ -1,0 +1,40 @@
+{
+  "name": "webdriverIo-xplatform-mobile",
+  "version": "1.0.0",
+  "description": "mobile automation framework",
+  "scripts": {
+    "Open-MyReport": "npx allure serve report/allure-results",
+    "android": "npx wdio src/test/config/android.conf.ts",
+    "ios": "npx wdio src/test/config/ios.conf.ts"
+  },
+  "keywords": [
+    "webdriverIo",
+    "appium",
+    "android",
+    "ios",
+    "mobile automation",
+    "native mobile app"
+  ],
+  "author": "Amr Salem",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/amrsa1/wdio-nativeApp"
+  },
+  "devDependencies": {
+    "@wdio/allure-reporter": "^8.10.4",
+    "@wdio/appium-service": "^8.10.5",
+    "@wdio/cli": "^8.10.5",
+    "@wdio/local-runner": "^8.10.5",
+    "@wdio/mocha-framework": "8.10.4",
+    "@wdio/spec-reporter": "8.8.7",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "allure-commandline": "^2.22.1",
+    "appium": "2.0.0-beta.71",
+    "appium-uiautomator2-driver": "*",
+    "appium-xcuitest-driver": "*"
+  }
+}

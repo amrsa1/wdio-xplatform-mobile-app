@@ -1,0 +1,161 @@
+name: Wdio-x-native
+
+on:
+  workflow_dispatch:
+    inputs:
+      e2e:
+         type: choice
+         description: Select a platform
+         required: true
+         options: 
+            - xplatform
+            - ios
+            - android
+         default: xplatform
+        
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+env:
+  IPHONE_MODEL: iPhone 8
+  IOS_VERSION: 16.2
+  API_LEVEL: 32
+  EMULATOR_NAME: Nexus
+  EMULATOR_DEVICE: Nexus 5
+  EMULATOR_VERSION: 12
+  ANDROID_ARCH: x86_64
+  ANDROID_TARGET: google_apis
+  ANDROID_BUILD_TOOLS_VERSION: 34.0.0-rc4
+  ANDROID_SDK_PACKAGES: system-images;android-32;google_apis;x86_64 platforms;android-32 build-tools;34.0.0-rc4 platform-tools emulator
+  EMULATOR_TIMEOUT: 350
+  BOOT_TIMEOUT: 700
+
+jobs:
+  ios:
+    runs-on: 
+       - macos-13
+    if: ${{ contains(github.event.inputs.e2e, 'ios') || contains(github.event.inputs.e2e, 'xplatform') }}
+    strategy:
+      matrix:
+        os: [IOS]
+        device: [$IPHONE_MODEL]
+        version: [$IOS_VERSION]
+    steps:
+      - uses: actions/checkout@v3
+         
+      - name: Export environment variables
+        run: |
+          export IPHONE_MODEL=$IPHONE_MODEL
+          export IOS_VERSION=$IOS_VERSION
+     
+      - name: check simulator list
+        run: xcrun simctl list
+     
+      - name: Start simulator
+        run: |
+          chmod a+x ./sscript/start_simu.sh
+          ./sscript/start_simu.sh
+     
+      - name: Install dependencies
+        run: | 
+          npm i
+          
+      - name: Check simulator booting status
+        run: |
+          chmod a+x ./sscript/check_simu.sh
+          ./sscript/check_simu.sh
+
+      - name: Execute the test
+        run: | 
+          npm run ios
+     
+      - name: Generate report
+        if: always()
+        run: | 
+          npx allure generate report/allure-results    
+     
+      - name: Setup Pages
+        if: always()
+        uses: actions/configure-pages@v3      
+     
+      - name: Upload artifact
+        if: always()
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: './allure-report'       
+     
+      - name: Deploy to GitHub Pages
+        if: always()
+        id: deployment
+        uses: actions/deploy-pages@v2
+
+  android:
+    runs-on: macos-13
+    if: ${{ contains(github.event.inputs.e2e, 'android') || contains(github.event.inputs.e2e, 'xplatform') }}
+    strategy:
+      matrix:
+        os: [Android]
+        emulator_name: [$EMULATOR_NAME]
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Add avdmanager and sdkmanager to system PATH
+        run: |
+          echo "$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools:$ANDROID_HOME/build-tools/${{ env.ANDROID_BUILD_TOOLS_VERSION }}" >> $GITHUB_PATH
+      
+      - name: Install Sdk
+        run: |
+          yes Y | sdkmanager --licenses
+          sdkmanager --install ${ANDROID_SDK_PACKAGES}
+      
+      - name: Build emulator
+        run: |
+          echo "no" | avdmanager --verbose create avd --force -n $EMULATOR_NAME --device "$EMULATOR_DEVICE" --abi "${ANDROID_TARGET}/${ANDROID_ARCH}" -k "system-images;android-${API_LEVEL};${ANDROID_TARGET};${ANDROID_ARCH}"
+      
+      - name: Launch emulator
+        run: |
+          chmod +x ./sscript/start_emu.sh
+          ./sscript/start_emu.sh
+
+      - name: Install dependencies
+        run: | 
+          npm i
+      
+      - name: Check emulator booting status
+        run: |
+          chmod a+x ./sscript/check_emu.sh
+          ./sscript/check_emu.sh
+     
+      - name: Install APK
+        run: |
+          adb shell dumpsys window 2>/dev/null | grep -i mCurrentFocus
+          adb install Android-NativeDemoApp-0.4.0.apk
+          chmod a+x ./sscript/mainActivityCheck.sh
+          ./sscript/mainActivityCheck.sh
+
+      - name: Execute the test
+        run: | 
+          npm run android
+          
+      - name: Generate report
+        if: always()
+        run: | 
+          npx allure generate report/allure-results    
+         
+      - name: Setup Pages
+        if: always()
+        uses: actions/configure-pages@v3
+        
+      - name: Upload artifact
+        if: always()
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: './allure-report'
+          
+      - name: Deploy to GitHub Pages
+        if: always()
+        id: deployment
+        uses: actions/deploy-pages@v2
