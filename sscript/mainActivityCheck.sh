@@ -25,7 +25,7 @@ function check_current_focus() {
     elapsed_time=$((current_time - start_time))
     if [ $elapsed_time -gt $timeout ]; then
       printf "==> Timeout after ${timeout} seconds elapsed 🕛.. \n"
-      break
+      return 1
     fi
     sleep 4
   done
