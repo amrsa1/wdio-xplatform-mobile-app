@@ -20,7 +20,6 @@ on:
             - Nexus 5
             - Nexus 6
          default: Nexus 5
-         
       IOS_simulator:
          type: choice
          description: Select a device 
