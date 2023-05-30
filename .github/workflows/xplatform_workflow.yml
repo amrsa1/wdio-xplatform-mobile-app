@@ -12,6 +12,24 @@ on:
             - ios
             - android
          default: xplatform
+      android_emulator:
+         type: choice
+         description: Select a device 
+         required: true
+         options: 
+            - Nexus 5
+            - Nexus 6
+         default: Nexus 5
+         
+      IOS_simulator:
+         type: choice
+         description: Select a device 
+         required: true
+         options: 
+            - Iphone 8
+            - iPhone 12 Pro
+            - iPhone 14 Pro
+         default: Iphone 8
         
 
 permissions:
@@ -20,11 +38,11 @@ permissions:
   id-token: write
 
 env:
-  IPHONE_MODEL: iPhone 8
+  IPHONE_MODEL: ${{ inputs.IOS_simulator }} 
   IOS_VERSION: 16.2
   API_LEVEL: 32
   EMULATOR_NAME: Nexus
-  EMULATOR_DEVICE: Nexus 5
+  EMULATOR_DEVICE: ${{ inputs.android_emulator }} 
   EMULATOR_VERSION: 12
   ANDROID_ARCH: x86_64
   ANDROID_TARGET: google_apis
