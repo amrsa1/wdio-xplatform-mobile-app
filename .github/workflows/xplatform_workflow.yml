@@ -14,7 +14,7 @@ on:
          default: xplatform
       android_emulator:
          type: choice
-         description: Select a device 
+         description: Select an android device 
          required: true
          options: 
             - Nexus 5
@@ -22,7 +22,7 @@ on:
          default: Nexus 5
       IOS_simulator:
          type: choice
-         description: Select a device 
+         description: Select an Iphone device 
          required: true
          options: 
             - Iphone 8
