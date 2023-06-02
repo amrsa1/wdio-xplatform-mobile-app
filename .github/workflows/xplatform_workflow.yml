@@ -149,7 +149,7 @@ jobs:
       - name: Install APK
         run: |
           adb shell dumpsys window 2>/dev/null | grep -i mCurrentFocus
-          adb install Android-NativeDemoApp-0.4.0.apk
+          adb install ./app/Android-NativeDemoApp-0.4.0.apk
           chmod a+x ./sscript/mainActivityCheck.sh
           ./sscript/mainActivityCheck.sh
 
