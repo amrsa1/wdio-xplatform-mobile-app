@@ -25,10 +25,10 @@ on:
          description: Select an Iphone device 
          required: true
          options: 
-            - Iphone 8
+            - iphone 8
             - iPhone 12 Pro
             - iPhone 14 Pro
-         default: Iphone 8
+         default: iphone 8
         
 
 permissions:
