@@ -1,4 +1,4 @@
-<img src="[https://example.com/images/openai-logo.png](https://miro.medium.com/v2/resize:fit:4800/format:webp/1*_raRi4X7ri5yw4vk8EZ-pA.png)" alt="Ultimate guide" style="max-width: 200px; border-radius: 10px;">
+<img src="https://miro.medium.com/v2/resize:fit:4800/format:webp/1*_raRi4X7ri5yw4vk8EZ-pA.png" alt="Ultimate guide" style="max-width: 200px; border-radius: 10px;">
 
 # xplatform-mobile-app-wdio
 XPlatform automation framework utilizing WebdriverIO to conduct native mobile app testing on both iOS devices and emulators. Additionally, incorporate GitHub Actions workflows to execute the tests free of charge on Android emulators and iOS simulators.
