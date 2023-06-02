@@ -25,7 +25,7 @@ on:
          description: Select an Iphone device 
          required: true
          options: 
-            - iphone 8
+            - iPhone 8
             - iPhone 12 Pro
             - iPhone 14 Pro
          default: iphone 8
