@@ -5,7 +5,7 @@ function check_current_focus() {
   printf "==> Checking emulator running activity \n"
   start_time=$(date +%s)
   i=0
-  timeout=20
+  timeout=60
   target="com.google.android.apps.nexuslauncher.NexusLauncherActivity"
 
   while true; do
